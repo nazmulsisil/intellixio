@@ -23,11 +23,30 @@ const fastify = Fastify({
             },
 });
 
+import { resolveZone } from './resolver';
+
 fastify.get('/healthz', async (request, reply) => {
     const isDbHealthy = await checkDbHealth();
     const status = isDbHealthy ? 200 : 503;
     reply.status(status);
     return { ok: true, db: isDbHealthy };
+});
+
+fastify.post('/v1/resolve-zone', async (request, reply) => {
+    const body: any = request.body;
+    if (!body || typeof body.text !== 'string') {
+        reply.status(400);
+        return { error: 'Invalid request body. "text" is required.' };
+    }
+
+    try {
+        const result = await resolveZone(body.text);
+        return result;
+    } catch (err) {
+        request.log.error(err);
+        reply.status(500);
+        return { error: 'Internal Server Error' };
+    }
 });
 
 const start = async () => {

@@ -4,10 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "tsx --test tests/**/*.test.ts",
     "dev": "tsx watch src/index.ts | pino-pretty",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "import:geojson": "tsx scripts/import-geojson.ts"
   },
   "keywords": [],
   "author": "",
