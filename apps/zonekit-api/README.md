@@ -2,7 +2,39 @@
 
 This is the internal spatial resolution and tagging service for the Zendolead platform.
 
+## `GET /healthz`
+
+> **Last Updated: 2026-02-20**
+
+The `GET /healthz` endpoint serves as a health check to verify the service status, including its connection to the database.
+
+**Request:**
+```bash
+curl http://localhost:4000/healthz
+```
+
+**Response (Healthy DB):**
+```json
+{
+  "ok": true,
+  "db": true
+}
+```
+
+**Response (Unhealthy DB):**
+HTTP Status `503 Service Unavailable`
+```json
+{
+  "ok": true,
+  "db": false
+}
+```
+
+---
+
 ## `POST /v1/resolve-zone`
+
+> **Last Updated: 2026-02-20**
 
 The `POST /v1/resolve-zone` endpoint uses trigram similarity (`pg_trgm`) to match unstructured location strings to normalized administrative zones in the database.
 
@@ -122,3 +154,44 @@ curl -X POST http://localhost:4000/v1/resolve-zone \
   "reason": "Top candidate score (0.12) is below the minimum threshold (0.35)."
 }
 ```
+
+---
+
+## `POST /v1/tag-product`
+
+> **Last Updated: 2026-02-20**
+
+The `POST /v1/tag-product` endpoint tags a product with the spatial zones that intersect its coordinates (latitude and longitude).
+
+It evaluates the point `[lng, lat]` against the `zendolead.zones` table using a `ST_Covers` PostGIS query to find all intersecting zones and the specific "leaf zone" (the zone with the smallest area). It then upserts these results into the `zendolead.product_geo` table.
+
+### Requirements & Authorization
+- **Feature Flag**: Write operations are gated behind the `ZONEKIT_TAGGING_ENABLED=true` environment variable.
+- **`x-zonekit-key`**: Requests must include the internal API key in this header matching the `ZONEKIT_INTERNAL_API_KEY` environment variable.
+
+**Request:**
+```bash
+curl -X POST http://localhost:4000/v1/tag-product \
+  -H "Content-Type: application/json" \
+  -H "x-zonekit-key: <internal-api-key>" \
+  -d '{
+    "productId": "prod_123",
+    "lat": 23.8103,
+    "lng": 90.4125
+  }'
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "productId": "prod_123",
+  "leafZoneId": "zone_123_smallest_area",
+  "zoneIds": [
+    "zone_123_smallest_area",
+    "zone_456_larger_area",
+    "zone_789_largest_area"
+  ]
+}
+```
+
