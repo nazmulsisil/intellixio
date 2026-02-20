@@ -21,7 +21,7 @@ When the text perfectly or closely matches a single zone.
 
 **Request:**
 ```bash
-curl -X POST http://localhost:3000/v1/resolve-zone \
+curl -X POST http://localhost:4000/v1/resolve-zone \
   -H "Content-Type: application/json" \
   -d '{"text": "Dhaka"}'
 ```
@@ -47,7 +47,7 @@ When the text has a typo, but it's still clearly the best match by a wide margin
 
 **Request:**
 ```bash
-curl -X POST http://localhost:3000/v1/resolve-zone \
+curl -X POST http://localhost:4000/v1/resolve-zone \
   -H "Content-Type: application/json" \
   -d '{"text": "Dhhaka City"}'
 ```
@@ -73,7 +73,7 @@ When the text could refer to multiple different places, and the database has sim
 
 **Request:**
 ```bash
-curl -X POST http://localhost:3000/v1/resolve-zone \
+curl -X POST http://localhost:4000/v1/resolve-zone \
   -H "Content-Type: application/json" \
   -d '{"text": "Mirpur"}'
 ```
@@ -109,7 +109,7 @@ When the text doesn't resemble anything in the database closely enough.
 
 **Request:**
 ```bash
-curl -X POST http://localhost:3000/v1/resolve-zone \
+curl -X POST http://localhost:4000/v1/resolve-zone \
   -H "Content-Type: application/json" \
   -d '{"text": "asdfghjkl"}'
 ```
