@@ -15,9 +15,12 @@ These rules apply to all work in the Intellixio monorepo.
 6) Summarize what changed and why, including how to run verification.
 
 ## Turborepo + pnpm
+- Even though workspaces may be opened at the app folder level, **you MUST run all CLI, `pnpm`, and `turbo` commands from the monorepo root**.
+- If you are in a subdirectory, the monorepo root is located at `../../` (or higher) relative to the app directory.
+- When using your terminal tool, always set the working directory (`Cwd`) to the monorepo root.
 - Prefer `pnpm <script>` wrappers defined at repo root.
-- Use `pnpm turbo run <task> --filter=<target>` for scoped work.
-- If you are in a subdirectory, `cd` to repo root before running Turbo.
+- Rely on turborepo filtering to scope commands to a specific app, e.g.: `pnpm turbo run <task> --filter=<target>`.
+- NEVER run `pnpm install` or `turbo run` from inside the app directory directly.
 
 ## Safety and permissions
 - If Antigravity is configured with Strict Mode, follow it. Prefer safety over speed.
