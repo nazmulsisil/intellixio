@@ -2,6 +2,7 @@
   "name": "intellixio",
   "private": true,
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
@@ -15,6 +16,8 @@
   },
   "packageManager": "pnpm@9.0.0",
   "engines": {
-    "node": ">=18"
+    "node": "24.13.1",
+    "npm": "11.8.0",
+    "pnpm": ">=9.0.0"
   }
 }

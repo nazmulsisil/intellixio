@@ -2,6 +2,13 @@
 
 This Turborepo starter is maintained by the Turborepo core team.
 
+## Environment Requirements
+
+To ensure development consistency, this repository strictly requires:
+- **Node.js**: `v24.13.1`
+- **npm**: `v11.8.0`
+- **Package Manager**: `pnpm` (enforced via `preinstall` script)
+
 ## Using this example
 
 Run the following command:
