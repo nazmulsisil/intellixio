@@ -4,7 +4,7 @@ import pino from 'pino';
 import { pool, checkDbHealth } from './db';
 
 // Validate environment variables
-const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 4000;
 const LOG_LEVEL = process.env.LOG_LEVEL || 'info';
 
 const fastify = Fastify({
@@ -24,6 +24,7 @@ const fastify = Fastify({
 });
 
 import { resolveZone } from './resolver';
+import { tagProductHandler } from './tagger';
 
 fastify.get('/healthz', async (request, reply) => {
     const isDbHealthy = await checkDbHealth();
@@ -48,6 +49,8 @@ fastify.post('/v1/resolve-zone', async (request, reply) => {
         return { error: 'Internal Server Error' };
     }
 });
+
+fastify.post('/v1/tag-product', tagProductHandler);
 
 const start = async () => {
     try {
